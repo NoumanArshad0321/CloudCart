@@ -1,0 +1,104 @@
+/* CloudCart — clean cloud dashboard style.
+   Light background, white cards, dark charcoal text,
+   one accent colour (a calm blue). No heavy gradients. */
+
+:root {
+  --accent: #2563eb;          /* the one accent colour */
+  --text: #1f2937;            /* dark charcoal text */
+  --muted: #6b7280;
+  --background: #f4f6f8;      /* light page background */
+  --border: #e5e7eb;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.brand-icon { font-size: 1.6rem; margin-right: 0.5rem; }
+.brand-name { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+.sidebar .nav-link {
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+.sidebar .nav-link:hover { background: #eef2ff; }
+.sidebar .nav-link.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* --- Deployment status badge in the sidebar --- */
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.status-ok { background: #dcfce7; color: #166534; }
+.status-off { background: #fef3c7; color: #92400e; }
+
+/* --- Main content --- */
+.content { max-width: 1100px; }
+.page-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
+
+/* --- Statistic cards --- */
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.stat-number { font-size: 1.7rem; font-weight: 700; }
+.stat-label { color: var(--muted); font-size: 0.9rem; }
+
+/* --- Cards --- */
+.card { border: 1px solid var(--border); border-radius: 12px; }
+.card-header { background: #ffffff; font-weight: 600; }
+
+/* --- Product images --- */
+.product-card { overflow: hidden; }
+.product-img {
+  height: 200px;
+  object-fit: cover;   /* crop the photo to fit, without stretching it */
+}
+.gallery-thumb {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.detail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px 0 0 12px;
+}
+.img-preview { max-height: 220px; border-radius: 8px; }
+
+/* --- Small screens: the sidebar becomes a top bar --- */
+@media (max-width: 768px) {
+  .d-flex { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-img { border-radius: 12px 12px 0 0; }
+}

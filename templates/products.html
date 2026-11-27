@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Products — CloudCart{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="page-title mb-0">Products</h1>
+  <a class="btn btn-primary" href="{{ url_for('add_product_page') }}">+ Add Product</a>
+</div>
+
+<!-- Search by name + filter by category -->
+<form class="row g-2 mb-4" method="get" action="{{ url_for('products') }}">
+  <div class="col-md-6">
+    <input type="search" class="form-control" name="q" placeholder="Search by product name..." value="{{ search }}">
+  </div>
+  <div class="col-md-4">
+    <select class="form-select" name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+      <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-outline-primary w-100" type="submit">Search</button>
+  </div>
+</form>
+
+{% if products %}
+<div class="row g-3">
+  {% for product in products %}
+  <div class="col-sm-6 col-lg-4">
+    <div class="card product-card h-100">
+      <img src="{{ image_url_for(product) }}" class="card-img-top product-img" alt="{{ product.name }}">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text text-muted mb-1">Rs. {{ "{:,.0f}".format(product.price) }}</p>
+        <p class="card-text mb-2">
+          <span class="badge bg-light text-dark border">{{ product.category }}</span>
+          <span class="badge bg-primary">Render (local disk)</span>
+        </p>
+        <p class="card-text small text-muted">Image size: {{ (product.image_size / 1024) | round(1) }} KB &middot; Added {{ product.created_at }}</p>
+        <div class="mt-auto d-flex gap-2">
+          <a class="btn btn-outline-primary btn-sm flex-grow-1" href="{{ url_for('product_detail', product_id=product.id) }}">View details</a>
+          <form method="post" action="{{ url_for('delete_product_page', product_id=product.id) }}" onsubmit="return confirm('Delete {{ product.name }}? Its image will be deleted too.');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+  No products found{% if search or category %} for this search{% endif %}.
+  <a href="{{ url_for('add_product_page') }}">Add your first product</a>.
+</div>
+{% endif %}
+{% endblock %}

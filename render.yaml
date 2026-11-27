@@ -1,0 +1,14 @@
+# Render Blueprint for CloudCart.
+# In Render: New -> Blueprint, pick the CloudCart repo, and Render
+# creates the service below. The only secret is SECRET_KEY, set in
+# the Render dashboard (sync: false), never in this file or in git.
+services:
+  - type: web
+    name: cloudcart
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        sync: false

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}About Project — CloudCart{% endblock %}
+{% block content %}
+<h1 class="page-title">About Project</h1>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>CloudCart — Cloud-Based E-Commerce Product Image Storage System</h5>
+    <p>A university Cloud Computing lab project. It demonstrates how an
+    e-commerce application runs in the cloud: the app itself is hosted
+    on <strong>Render</strong> (a cloud platform) instead of on one
+    local computer, and product images are stored on the server that
+    runs the app, while product information is stored in a SQLite
+    database on the same server.</p>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header">Why host on Render?</div>
+      <div class="card-body">
+        <ul class="mb-0">
+          <li><strong>Available anywhere:</strong> anyone with the link can open the shop — it does not depend on your laptop being on.</li>
+          <li><strong>No setup on your computer:</strong> Render runs the app on its own servers; you just push the code to GitHub.</li>
+          <li><strong>Free for a lab:</strong> the free tier needs no credit card and is enough for a demo.</li>
+          <li><strong>Real cloud behaviour:</strong> the service sleeps when idle and its disk is temporary — you learn how cloud hosting actually behaves, limits included.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header">Local computer vs cloud hosting</div>
+      <div class="card-body">
+        <ul class="mb-0">
+          <li><strong>Local Mode</strong> (running on this computer): the app and its images live on your machine. Simple, but nobody else can reach it and everything is lost if the machine is off or replaced.</li>
+          <li><strong>Cloud hosting</strong> (Render): the app runs on Render's servers and is reachable from anywhere. But on the free tier the server's disk is <strong>ephemeral</strong> — images and the database can be lost on a restart or redeploy. That is why a production system stores files in object storage instead of on the web server's disk (see the Cloud Storage page).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">Technology stack</div>
+  <div class="card-body">
+    <p class="mb-0">Python + Flask (backend) &middot; SQLite (product data)
+    &middot; Server-disk image storage (instance/uploads/) &middot;
+    Bootstrap 5 (frontend) &middot; Gunicorn (production server) &middot;
+    pytest (tests) &middot; Render (free cloud hosting).</p>
+  </div>
+</div>
+{% endblock %}

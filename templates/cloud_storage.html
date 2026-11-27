@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Cloud Storage — CloudCart{% endblock %}
+{% block content %}
+<h1 class="page-title">Cloud Storage</h1>
+<p class="text-muted">Where your product images really live — checked live, never faked.</p>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5>Render — the cloud platform</h5>
+    {% if render_hosted %}
+      <div class="alert alert-success mb-2">&#9679; Running on Render.</div>
+      <p class="mb-0">This app is deployed on Render's servers. Product
+      images are stored on the Render server's disk under
+      <code>instance/uploads/</code>, and product information is stored
+      in the SQLite database on the same server.</p>
+    {% else %}
+      <div class="alert alert-info mb-2">&#9679; Local Mode — running on this computer.</div>
+      <p class="mb-0">This app is running on your own computer, not on
+      Render yet. Product images are stored on this computer's disk
+      under <code>instance/uploads/</code>, and product information is
+      stored in the SQLite database next to them. Deploy it on Render
+      (see <code>docs/DEPLOYMENT.md</code>) and this page will say
+      “Running on Render”.</p>
+    {% endif %}
+    <dl class="row small mt-3 mb-0">
+      <dt class="col-sm-4">Image folder</dt><dd class="col-sm-8"><code>instance/uploads/</code></dd>
+      <dt class="col-sm-4">File names</dt><dd class="col-sm-8">Unique UUID names (e.g. <code>9f3c…a1.png</code>), so uploads never overwrite each other</dd>
+      <dt class="col-sm-4">Database</dt><dd class="col-sm-8">SQLite — stores the file name only, never the image itself</dd>
+      <dt class="col-sm-4">Access</dt><dd class="col-sm-8">Images are served only through the <code>/uploads/&lt;filename&gt;</code> route, which rejects any file name that is not a UUID image name</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="card mb-4 border-warning">
+  <div class="card-body">
+    <h5>&#9888; Important limit of Render's free tier — please read</h5>
+    <p class="mb-0">Render's free service has an <strong>ephemeral
+    filesystem</strong>: files written to the server's disk are
+    <strong>temporary</strong>. When Render restarts the service or you
+    redeploy it, <strong>your uploaded images AND the SQLite database
+    can be lost</strong>. The deployed demo is therefore disposable —
+    after a restart you re-add the products. The free service also
+    <strong>sleeps after 15 minutes without visitors</strong>, so the
+    first visit after that takes about a minute to wake up. This is
+    normal for a free lab demo, and it is exactly why a real shop
+    would not store images on the web server's disk — see
+    <a href="{{ url_for('about') }}">About</a> and
+    <code>docs/RENDER_STORAGE.md</code>.</p>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-number">{{ stats.total_products }}</div><div class="stat-label">Total products</div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-number">{{ stats.images_stored }}</div><div class="stat-label">Images stored</div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-number">{{ (stats.total_size / 1024) | round(1) }} KB</div><div class="stat-label">Total image size</div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-number">{{ (stats.average_size / 1024) | round(1) }} KB</div><div class="stat-label">Average image size</div></div>
+  </div>
+</div>
+
+<h5 class="mt-4">How an image is stored</h5>
+<ol>
+  <li>You upload an image on the Add Product page.</li>
+  <li>The server checks the file type (JPG, JPEG, PNG, WebP) and size (max 5 MB).</li>
+  <li>The image gets a unique file name (a random UUID + the original extension) and is saved in <code>instance/uploads/</code> on the server's disk.</li>
+  <li>Only the file name is saved in SQLite — never the image itself.</li>
+  <li>When the image is displayed, the server sends it through the <code>/uploads/&lt;filename&gt;</code> route, which only accepts UUID image names.</li>
+  <li>Deleting the product deletes its database row and its image file, so nothing is left behind.</li>
+</ol>
+
+<h5 class="mt-4">What would a production setup use instead?</h5>
+<p>Object storage — for example Amazon S3, Azure Blob Storage or
+Cloudflare R2. Files in object storage live outside the web server,
+so they survive restarts and redeploys, and they can be served to any
+number of users. See <code>docs/RENDER_STORAGE.md</code> for the full
+comparison.</p>
+{% endblock %}

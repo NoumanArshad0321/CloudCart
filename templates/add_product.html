@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Add Product — CloudCart{% endblock %}
+{% block content %}
+<h1 class="page-title">Add Product</h1>
+<p class="text-muted">Fill in the product details and upload an image (JPG, JPEG, PNG or WebP, max 5 MB).</p>
+
+{% if not render_hosted %}
+<div class="alert alert-info">
+  <strong>Local Mode:</strong> this image will be stored on this
+  computer's disk (<code>instance/uploads/</code>). When the app is
+  deployed, it is stored on Render's server disk instead — and on
+  Render's free tier that disk is temporary (see the
+  <a href="{{ url_for('cloud_storage') }}">Cloud Storage</a> page).
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data" id="add-form">
+      {{ form.hidden_tag() }}
+
+      <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control", placeholder="e.g. Wireless Headphones") }}
+        {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          {{ form.price.label(class="form-label") }}
+          {{ form.price(class="form-control", placeholder="e.g. 4999") }}
+          {% for error in form.price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6 mb-3">
+          {{ form.category.label(class="form-label") }}
+          {{ form.category(class="form-select") }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows="3", placeholder="A short description of the product...") }}
+      </div>
+
+      <div class="mb-3">
+        {{ form.image.label(class="form-label") }}
+        {{ form.image(class="form-control", id="image-input", accept=".jpg,.jpeg,.png,.webp") }}
+        <div class="form-text">JPG, JPEG, PNG or WebP only. Maximum 5 MB.</div>
+        <!-- Live image preview before uploading -->
+        <img id="image-preview" class="img-preview mt-2 d-none" alt="Image preview">
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submit-btn">Add Product</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('products') }}">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

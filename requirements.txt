@@ -1,0 +1,11 @@
+# CloudCart dependencies — versions verified to install and run
+# together on Python 3.12.3 (see README for the exact list).
+# There is no cloud-storage SDK any more: images are stored on
+# the server's own disk (see storage.py), and the app is hosted
+# on Render.
+Flask==3.0.3
+Flask-WTF==1.2.1
+WTForms==3.1.2
+python-dotenv==1.0.1
+gunicorn==22.0.0
+pytest==8.3.2

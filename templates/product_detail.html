@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — CloudCart{% endblock %}
+{% block content %}
+<a href="{{ url_for('products') }}" class="btn btn-link ps-0">&larr; Back to products</a>
+
+<div class="card">
+  <div class="row g-0">
+    <div class="col-md-5">
+      <img src="{{ image_url_for(product) }}" class="img-fluid detail-img" alt="{{ product.name }}">
+    </div>
+    <div class="col-md-7">
+      <div class="card-body">
+        <h1 class="card-title">{{ product.name }}</h1>
+        <p class="fs-4">Rs. {{ "{:,.2f}".format(product.price) }}</p>
+        <p>
+          <span class="badge bg-light text-dark border">{{ product.category }}</span>
+          <span class="badge bg-primary">Stored on Render (local disk)</span>
+        </p>
+        <p class="card-text">{{ product.description or "No description." }}</p>
+        <dl class="row small">
+          <dt class="col-sm-4">Product ID</dt><dd class="col-sm-8">{{ product.id }}</dd>
+          <dt class="col-sm-4">File name</dt><dd class="col-sm-8"><code>{{ product.file_name }}</code></dd>
+          <dt class="col-sm-4">Image size</dt><dd class="col-sm-8">{{ (product.image_size / 1024) | round(1) }} KB</dd>
+          <dt class="col-sm-4">Added</dt><dd class="col-sm-8">{{ product.created_at }}</dd>
+        </dl>
+        <form method="post" action="{{ url_for('delete_product_page', product_id=product.id) }}" onsubmit="return confirm('Delete {{ product.name }}? Its image will be deleted too.');">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-danger" type="submit">Delete product and image</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
