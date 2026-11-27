@@ -224,3 +224,4 @@ and set `SECRET_KEY` in the Render dashboard.
 - Multiple images per product.
 - Image thumbnails generated on upload.
 - Price history and stock levels.
+.
